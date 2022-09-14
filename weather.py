@@ -1,10 +1,12 @@
 from aiogram import Bot, Dispatcher, executor, types
 import python_weather
+from setings import TOKEN
 
 # bot init
-bot = Bot(token='5246607557:AAE94gQiLa9liYD2Q0roFPYqJladGaptXFg')
+bot = Bot(token=TOKEN)
 dp = Dispatcher(bot)
 client = python_weather.Client(format=python_weather.IMPERIAL, locale='ru-RU')
+
 
 # echo
 @dp.message_handler()
