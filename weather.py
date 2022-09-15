@@ -5,23 +5,23 @@ from setings import TOKEN
 # bot init
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot)
-client = python_weather.Client(format=python_weather.IMPERIAL, locale='ru-RU')
+client = python_weather.Client(format=python_weather.IMPERIAL)
 
 
 # echo
 @dp.message_handler()
 async def echo(message: types.Message):
-    weather = await client.find(message.text)
+    weather = await client.get(message.text)
     celsius = round((weather.current.temperature - 32) / 1.8)
 
-    resp_msg = weather.location_name + '\n'
-    resp_msg += f'Текущая температура: {celsius}°\n'
-    resp_msg += f'Состояние погоды: {weather.current.sky_text}'
+    resp_msg = f'{weather.nearest_area.region}; {weather.nearest_area.country}\n'
+    resp_msg += f'Current temperature: {celsius}°\n'
+    resp_msg += f'State of the weather: {weather.current.type}'
 
     if celsius <= 10:
-        resp_msg += '\n\nПрохладно! Одевайся теплее!'
+        resp_msg += '\n\nCool! Dress warmer!'
     else:
-        resp_msg += '\n\nТепло! Одевайся легче!'
+        resp_msg += '\n\nWarmth! Dress easier!'
 
     # for forecast in weather.forecasts:
     #   print(str(forecast.date), forecast.sky_text, forecast.temperature)
