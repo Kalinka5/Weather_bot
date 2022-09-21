@@ -67,10 +67,11 @@ async def daily_forecasts_command(message: types.Message, state: FSMContext):
         resp_msg = 'Three-day temperature forecast.\n\n'
 
         for forecast in weather.forecasts:
+            day = f"{forecast.date.isoweekday()}"
             t = f"{round((forecast.lowest_temperature - 32) / 1.8)}-{round((forecast.highest_temperature - 32) / 1.8)}"
             # descriptions = ", ".join(set(h.description for h in forecast.hourly))
             # emoji = "".join(map(repr, set(h.type for h in forecast.hourly)))
-            resp_msg += f'{t}°C\n'
+            resp_msg += f'{day}: {t}°C\n'
             # resp_msg += f'{forecast.date:%a}: {t}, {descriptions}. {emoji}'
 
         await message.answer(resp_msg)
@@ -81,6 +82,7 @@ async def daily_forecasts_command(message: types.Message, state: FSMContext):
 async def process_city(message: types.Message, state: FSMContext):
     weather = await client.get(message.text)
     '''for forecast in weather.forecasts:
+        forecast.date.isoweekday()
         for hourly in forecast.hourly:
             hourly.time'''
     async with state.proxy() as data:
