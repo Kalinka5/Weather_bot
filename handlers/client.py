@@ -68,9 +68,9 @@ async def daily_forecasts_command(message: types.Message, state: FSMContext):
 
         for forecast in weather.forecasts:
             t = f"{round((forecast.lowest_temperature - 32) / 1.8)}-{round((forecast.highest_temperature - 32) / 1.8)}"
-            resp_msg += f'{forecast.date:%a}: {t}°C.\n'
-            # descriptions = ", ".join(set(h.description for h in forecast.hourly))
-            # emoji = "".join(map(repr, set(h.type for h in forecast.hourly)))
+            descriptions = ", ".join(set(h.description for h in forecast.hourly))
+            emoji = "".join(map(repr, set(h.type for h in forecast.hourly)))
+            resp_msg += f'{t}°C, {descriptions}, {emoji}\n'
             # resp_msg += f'{forecast.date:%a}: {t}, {descriptions}. {emoji}'
 
         await message.answer(resp_msg)
