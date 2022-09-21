@@ -44,7 +44,7 @@ async def moon_phase_command(message: types.Message, state: FSMContext):
 
 
 # @dp.message_handler(commands=["Hourly_forecasts"])
-async def day_forecasts_command(message: types.Message, state: FSMContext):
+async def hourly_forecasts_command(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         weather = data['city']
         resp_msg = 'Three-day temperature forecast.\n\n'
@@ -78,5 +78,5 @@ def register_handlers_client(dp: Dispatcher):
     dp.register_message_handler(command_start, commands=["start", "help"])
     dp.register_message_handler(temperature_command, commands=["Temperature"])
     dp.register_message_handler(moon_phase_command, commands=["Moon_phase"])
-    dp.register_message_handler(day_forecasts_command, commands=["Hourly_forecasts"])
+    dp.register_message_handler(hourly_forecasts_command, commands=["Hourly_forecasts"])
     dp.register_message_handler(process_city)
