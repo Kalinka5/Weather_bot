@@ -2,7 +2,6 @@ from aiogram import types, Dispatcher
 from Buttons import markups
 from create_bot import client
 from aiogram.dispatcher import FSMContext
-from python_weather.forecast import DailyForecast
 
 
 # @dp.message_handler(commands=["start", "help"])
@@ -44,13 +43,6 @@ async def moon_phase_command(message: types.Message, state: FSMContext):
         await state.finish()
 
 
-def render_daily(x: DailyForecast) -> str:
-    t = f"{round((x.lowest_temperature - 32) / 1.8)}-{round((x.highest_temperature - 32) / 1.8)}"
-    descriptions = ", ".join(set(h.description for h in x.hourly))
-    emoji = "".join(map(repr, set(h.type for h in x.hourly)))
-    return f"{x.date:%a}: {t}°, {descriptions}. {emoji}"
-
-
 # @dp.message_handler(commands=["Hourly_forecasts"])
 async def day_forecasts_command(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
@@ -58,7 +50,13 @@ async def day_forecasts_command(message: types.Message, state: FSMContext):
         resp_msg = 'Three-day temperature forecast.\n\n'
 
         for forecast in weather.forecasts:
-            resp_msg += render_daily(forecast)
+            t = f"{round((forecast.lowest_temperature - 32) / 1.8)}-{round((forecast.highest_temperature - 32) / 1.8)}"
+            descriptions = ", ".join(set(h.description for h in forecast.hourly))
+            emoji = "".join(map(repr, set(h.type for h in forecast.hourly)))
+            resp_msg += f'{forecast.date:%a}: '
+            resp_msg += f'{t}, '
+            resp_msg += f'{descriptions}. '
+            resp_msg += f'{emoji}'
 
         await message.answer(resp_msg)
         await state.finish()
