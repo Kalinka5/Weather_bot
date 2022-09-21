@@ -50,13 +50,15 @@ async def hourly_forecasts_command(message: types.Message, state: FSMContext):
         resp_msg = 'Three-day temperature forecast.\n\n'
 
         for forecast in weather.forecasts:
-            t = f"{round((forecast.lowest_temperature - 32) / 1.8)}-{round((forecast.highest_temperature - 32) / 1.8)}"
-            descriptions = ", ".join(set(h.description for h in forecast.hourly))
-            emoji = "".join(map(repr, set(h.type for h in forecast.hourly)))
-            resp_msg += f'{forecast.date:%a}: '
-            resp_msg += f'{t}, '
-            resp_msg += f'{descriptions}. '
-            resp_msg += f'{emoji}'
+            for hourly in forecast.hourly:
+                resp_msg += f'Time: {hourly.time}'
+                resp_msg += f'Temperature: {round((hourly.temperature - 32) / 1.8)}'
+                resp_msg += f'Description: {hourly.description}'
+                resp_msg += f'Type: {hourly.type}'
+            # t = f"{round((forecast.lowest_temperature - 32) / 1.8)}-{round((forecast.highest_temperature - 32) / 1.8)}"
+            # descriptions = ", ".join(set(h.description for h in forecast.hourly))
+            # emoji = "".join(map(repr, set(h.type for h in forecast.hourly)))
+            # resp_msg += f'{forecast.date:%a}: {t}, {descriptions}. {emoji}'
 
         await message.answer(resp_msg)
         await state.finish()
