@@ -2,6 +2,7 @@ from aiogram import types, Dispatcher
 from Buttons import markups
 from create_bot import client
 from aiogram.dispatcher import FSMContext
+from python_weather.forecast import DailyForecast
 
 
 # @dp.message_handler(commands=["start", "help"])
@@ -43,19 +44,21 @@ async def moon_phase_command(message: types.Message, state: FSMContext):
         await state.finish()
 
 
+def render_daily(x: DailyForecast) -> str:
+    t = f"{round((x.lowest_temperature - 32) / 1.8)}-{round((x.highest_temperature - 32) / 1.8)}"
+    descriptions = ", ".join(set(h.description for h in x.hourly))
+    emoji = "".join(map(repr, set(h.type for h in x.hourly)))
+    return f"{x.date:%a}: {t}°, {descriptions}. {emoji}"
+
+
 # @dp.message_handler(commands=["Hourly_forecasts"])
-async def hourly_forecasts_command(message: types.Message, state: FSMContext):
+async def day_forecasts_command(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         weather = data['city']
         resp_msg = 'Three-day temperature forecast.\n\n'
 
         for forecast in weather.forecasts:
-            for hourly in forecast.hourly:
-                resp_msg += f'Time: {hourly.time.real}\n'
-                resp_msg += f'Temperature --> {round((hourly.temperature - 32) / 1.8)}°\n'
-                resp_msg += f'Description --> {hourly.description}\n'
-                resp_msg += f'Type --> {hourly.type}\n'
-                resp_msg += '\n'
+            resp_msg += render_daily(forecast)
 
         await message.answer(resp_msg)
         await state.finish()
@@ -66,7 +69,7 @@ async def process_city(message: types.Message, state: FSMContext):
     weather = await client.get(message.text)
     '''for forecast in weather.forecasts:
         for hourly in forecast.hourly:
-            hourly.time.imag'''
+            hourly.time'''
     async with state.proxy() as data:
         data['city'] = weather
 
@@ -77,5 +80,5 @@ def register_handlers_client(dp: Dispatcher):
     dp.register_message_handler(command_start, commands=["start", "help"])
     dp.register_message_handler(temperature_command, commands=["Temperature"])
     dp.register_message_handler(moon_phase_command, commands=["Moon_phase"])
-    dp.register_message_handler(hourly_forecasts_command, commands=["Hourly_forecasts"])
+    dp.register_message_handler(day_forecasts_command, commands=["Hourly_forecasts"])
     dp.register_message_handler(process_city)
