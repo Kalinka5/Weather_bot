@@ -1,3 +1,2 @@
 aiogram==2.22.1
 python_weather==0.4.2
-python-dotenv==0.21.0
