@@ -55,10 +55,22 @@ async def hourly_forecasts_command(message: types.Message, state: FSMContext):
                 resp_msg += f'Temperature: {round((hourly.temperature - 32) / 1.8)}'
                 resp_msg += f'Description: {hourly.description}'
                 resp_msg += f'Type: {hourly.type}'
-            # t = f"{round((forecast.lowest_temperature - 32) / 1.8)}-{round((forecast.highest_temperature - 32) / 1.8)}"
-            # descriptions = ", ".join(set(h.description for h in forecast.hourly))
-            # emoji = "".join(map(repr, set(h.type for h in forecast.hourly)))
-            # resp_msg += f'{forecast.date:%a}: {t}, {descriptions}. {emoji}'
+
+        await message.answer(resp_msg)
+        await state.finish()
+
+
+# @dp.message_handler(commands=["Daily_forecasts"])
+async def daily_forecasts_command(message: types.Message, state: FSMContext):
+    async with state.proxy() as data:
+        weather = data['city']
+        resp_msg = 'Three-day temperature forecast.\n\n'
+
+        for forecast in weather.forecasts:
+            t = f"{round((forecast.lowest_temperature - 32) / 1.8)}-{round((forecast.highest_temperature - 32) / 1.8)}"
+            descriptions = ", ".join(set(h.description for h in forecast.hourly))
+            emoji = "".join(map(repr, set(h.type for h in forecast.hourly)))
+            resp_msg += f'{forecast.date:%a}: {t}, {descriptions}. {emoji}'
 
         await message.answer(resp_msg)
         await state.finish()
@@ -81,4 +93,5 @@ def register_handlers_client(dp: Dispatcher):
     dp.register_message_handler(temperature_command, commands=["Temperature"])
     dp.register_message_handler(moon_phase_command, commands=["Moon_phase"])
     dp.register_message_handler(hourly_forecasts_command, commands=["Hourly_forecasts"])
+    dp.register_message_handler(daily_forecasts_command, commands=["Daily_forecasts"])
     dp.register_message_handler(process_city)
