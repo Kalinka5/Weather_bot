@@ -5,7 +5,7 @@ from aiogram.dispatcher import FSMContext
 from create_bot import dp
 
 
-# @dp.message_handler(commands=["start", "help"])
+@dp.message_handler(commands=["start", "help"])
 async def command_start(message: types.Message):
     await message.answer(f'Hello, {message.from_user.first_name}.\nPlease enter the city you need.')
 
