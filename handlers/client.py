@@ -96,8 +96,8 @@ async def process_city(message: types.Message, state: FSMContext):
 
 def register_handlers_client(dp: Dispatcher):
     dp.register_message_handler(command_start, commands=["start", "help"])
-    dp.register_message_handler(temperature_command, commands=["🌡️ Temperature"])
-    dp.register_message_handler(moon_phase_command, commands=["🌗 Moon_phase"])
-    dp.register_message_handler(hourly_forecasts_command, commands=["🕗 Hourly_forecasts"])
-    dp.register_message_handler(daily_forecasts_command, commands=["📅 Daily_forecasts"])
+    dp.register_message_handler(temperature_command, commands=["Temperature"])
+    dp.register_message_handler(moon_phase_command, commands=["Moon_phase"])
+    dp.register_message_handler(hourly_forecasts_command, commands=["Hourly_forecasts"])
+    dp.register_message_handler(daily_forecasts_command, commands=["Daily_forecasts"])
     dp.register_message_handler(process_city)
