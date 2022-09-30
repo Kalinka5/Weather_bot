@@ -88,5 +88,5 @@ async def process_city(message: types.Message, state: FSMContext):
 
 def register_handlers_client(dp: Dispatcher):
     dp.register_message_handler(command_start, commands=["start", "help"])
-    dp.register_message_handler(handle_text, content_types=['text'])
+    dp.register_message_handler(handle_text)  # , content_types=['text'])
     dp.register_message_handler(process_city)
