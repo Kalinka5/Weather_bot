@@ -10,7 +10,7 @@ async def command_start(message: types.Message):
 
 
 # @dp.message_handler(content_types=['text'])
-def handle_text(message, state: FSMContext):
+async def handle_text(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         if message.text == "🌡️ Temperature":
             weather = data['city']
