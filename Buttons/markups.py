@@ -7,10 +7,10 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 # btnMain = KeyboardButton('Main menu')
 
 # ----Main_menu----
-btnTemperature = KeyboardButton('🌡️ Temperature')
-btnMoonPhase = KeyboardButton('🌗 Moon_phase')
-btnHourlyForecast = KeyboardButton('🕗 Hourly_forecasts')
-btnDailyForecast = KeyboardButton('📅 Daily_forecasts')
+btnTemperature = KeyboardButton('/Temperature 🌡️')
+btnMoonPhase = KeyboardButton('/Moon_phase 🌗')
+btnHourlyForecast = KeyboardButton('/Hourly_forecasts 🕗')
+btnDailyForecast = KeyboardButton('/Daily_forecasts 📅')
 # btnOther = KeyboardButton('Other')
 mainMenu = ReplyKeyboardMarkup(resize_keyboard=True)\
     .add(btnTemperature, btnHourlyForecast).add(btnMoonPhase, btnDailyForecast)
