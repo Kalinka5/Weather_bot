@@ -1,16 +1,15 @@
-from aiogram import types  # , Dispatcher
+from aiogram import types, Dispatcher
 from Buttons import markups
 from create_bot import client
 from aiogram.dispatcher import FSMContext
-from create_bot import dp
 
 
-@dp.message_handler(commands=["start", "help"])
+# @dp.message_handler(commands=["start", "help"])
 async def command_start(message: types.Message):
     await message.answer(f'Hello, {message.from_user.first_name}.\nPlease enter the city you need.')
 
 
-@dp.message_handler(content_types=['text'])
+# @dp.message_handler(content_types=['text'])
 def handle_text(message, state: FSMContext):
     if message.text == "🌡️ Temperature":
         async with state.proxy() as data:
@@ -72,11 +71,6 @@ def handle_text(message, state: FSMContext):
 
             await message.answer(resp_msg)
             await state.finish()
-    else:
-        weather = await client.get(message.text)
-        async with state.proxy() as data:
-            data['city'] = weather
-        dp.send_message(message.from_user.id, parse_mode='markdown', reply_markup=markups.mainMenu)
 
 
 '''# @dp.message_handler(commands=["Temperature"])
@@ -148,17 +142,17 @@ async def daily_forecasts_command(message: types.Message, state: FSMContext):
             # resp_msg += f'{forecast.date:%a}: {t}, {descriptions}. {emoji}'
 
         await message.answer(resp_msg)
-        await state.finish()
+        await state.finish()'''
 
 
 # @dp.message_handler()
 async def process_city(message: types.Message, state: FSMContext):
-    weather = await client.get(message.text)'''
-'''for forecast in weather.forecasts:
+    weather = await client.get(message.text)
+    '''for forecast in weather.forecasts:
         forecast.date.weekday()
         for hourly in forecast.hourly:
             hourly.time'''
-'''async with state.proxy() as data:
+    async with state.proxy() as data:
         data['city'] = weather
 
     await message.answer(f'Wow, cool city. Please choose what you need.', reply_markup=markups.mainMenu)
@@ -166,8 +160,9 @@ async def process_city(message: types.Message, state: FSMContext):
 
 def register_handlers_client(dp: Dispatcher):
     dp.register_message_handler(command_start, commands=["start", "help"])
-    dp.register_message_handler(temperature_command, commands=["🌡️ Temperature"])
-    dp.register_message_handler(moon_phase_command, commands=["🌗 Moon_phase"])
-    dp.register_message_handler(hourly_forecasts_command, commands=["🕗 Hourly_forecasts"])
-    dp.register_message_handler(daily_forecasts_command, commands=["📅 Daily_forecasts"])
-    dp.register_message_handler(process_city)'''
+    dp.register_message_handler(handle_text, content_types=['text'])
+    # dp.register_message_handler(temperature_command, commands=["🌡️ Temperature"])
+    # dp.register_message_handler(moon_phase_command, commands=["🌗 Moon_phase"])
+    # dp.register_message_handler(hourly_forecasts_command, commands=["🕗 Hourly_forecasts"])
+    # dp.register_message_handler(daily_forecasts_command, commands=["📅 Daily_forecasts"])
+    dp.register_message_handler(process_city)
