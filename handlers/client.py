@@ -26,9 +26,6 @@ async def handle_text(message: types.Message, state: FSMContext):
             else:
                 resp_msg += '\n\nWarmth! Dress easier!'
 
-            await message.answer(resp_msg)
-            await state.finish()
-
         elif message.text == "🌗 Moon_phase":
             weather = data['city']
             resp_msg = 'Three-day moon phase forecast.\n'
@@ -36,9 +33,6 @@ async def handle_text(message: types.Message, state: FSMContext):
                 resp_msg += f'\nForecast date: {forecast.date}\n'
                 resp_msg += f'Moon phase: {forecast.astronomy.moon_phase}\n'
                 resp_msg += f'Moon illumination - {forecast.astronomy.moon_illumination}%\n'
-
-            await message.answer(resp_msg)
-            await state.finish()
 
         elif message.text == "🕗 Hourly_forecasts":
             weather = data['city']
@@ -50,9 +44,6 @@ async def handle_text(message: types.Message, state: FSMContext):
                     resp_msg += f'Temperature: {round((hourly.temperature - 32) / 1.8)}'
                     resp_msg += f'Description: {hourly.description}'
                     resp_msg += f'Type: {hourly.type}'
-
-            await message.answer(resp_msg)
-            await state.finish()
 
         elif message.text == "📅 Daily_forecasts":
             weather = data['city']
