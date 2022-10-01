@@ -65,8 +65,7 @@ async def handle_text(message: types.Message, state: FSMContext):
                 forecast.date.weekday()
                 for hourly in forecast.hourly:
                     hourly.time'''
-            async with state.proxy() as data:
-                data['city'] = weather
+            data['city'] = weather
 
             await message.answer(f'Wow, cool city. Please choose what you need.', reply_markup=markups.mainMenu)
 
@@ -89,5 +88,5 @@ async def handle_text(message: types.Message, state: FSMContext):
 
 def register_handlers_client(dp: Dispatcher):
     dp.register_message_handler(command_start, commands=["start", "help"])
-    dp.register_message_handler(handle_text)  # , content_types=['text'])
+    dp.register_message_handler(handle_text, content_types=['text'])
     # dp.register_message_handler(process_city)
