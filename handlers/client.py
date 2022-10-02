@@ -122,6 +122,6 @@ def register_handlers_client(dp: Dispatcher):
                                 text=['📅 Daily_forecasts'],
                                 state=Form.choice)
     dp.register_message_handler(process_closing,
-                                text=['Closing'],
+                                text=['🏙️ Another city'],
                                 state=Form.choice)
     dp.register_message_handler(process_city, state=Form.city)
