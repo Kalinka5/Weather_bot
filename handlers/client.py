@@ -28,7 +28,7 @@ async def process_city(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['city'] = weather
 
-    await state.set_state(Form.choice)
+    await Form.next()
     await message.answer(f'Wow, cool city. Please choose what you need.', reply_markup=markups.mainMenu)
 
 
@@ -109,19 +109,9 @@ async def process_closing(message: types.Message, state: FSMContext):
 
 def register_handlers_client(dp: Dispatcher):
     dp.register_message_handler(command_start, commands=["start", "help"])
-    dp.register_message_handler(process_temperature,
-                                text=['🌡️ Temperature'],
-                                state=Form.choice)
-    dp.register_message_handler(process_moon_phase,
-                                text=['🌗 Moon_phase'],
-                                state=Form.choice)
-    dp.register_message_handler(process_hourly_forecasts,
-                                text=['🕗 Hourly_forecasts'],
-                                state=Form.choice)
-    dp.register_message_handler(process_daily_forecasts,
-                                text=['📅 Daily_forecasts'],
-                                state=Form.choice)
-    dp.register_message_handler(process_closing,
-                                text=['🏙️ Another city'],
-                                state=Form.choice)
+    dp.register_message_handler(process_temperature, text=['🌡️ Temperature'], state=Form.choice)
+    dp.register_message_handler(process_moon_phase, text=['🌗 Moon_phase'], state=Form.choice)
+    dp.register_message_handler(process_hourly_forecasts, text=['🕗 Hourly_forecasts'], state=Form.choice)
+    dp.register_message_handler(process_daily_forecasts, text=['📅 Daily_forecasts'], state=Form.choice)
+    dp.register_message_handler(process_closing, text=['🏙️ Another city'], state=Form.choice)
     dp.register_message_handler(process_city, state=Form.city)
