@@ -2,19 +2,40 @@ from aiogram import types, Dispatcher
 from Buttons import markups
 from create_bot import client
 from aiogram.dispatcher import FSMContext
+from aiogram.dispatcher.filters.state import State, StatesGroup
+
+
+class Form(StatesGroup):
+    city = State()  # Will be represented in storage as 'Form:city'
 
 
 # @dp.message_handler(commands=["start", "help"])
 async def command_start(message: types.Message):
+    # Set state
+    await Form.city.set()
+
     await message.answer(f'Hello, {message.from_user.first_name}.\nPlease enter the city you need.')
+
+
+# @dp.message_handler(state=Form.city)
+async def process_city(message: types.Message, state: FSMContext):
+    weather = await client.get(message.text)
+    '''for forecast in weather.forecasts:
+        forecast.date.weekday()
+        for hourly in forecast.hourly:
+            hourly.time'''
+    async with state.proxy() as data:
+        data['city'] = weather
+
+    await message.answer(f'Wow, cool city. Please choose what you need.', reply_markup=markups.mainMenu)
 
 
 # @dp.message_handler(content_types=['text'])
 async def handle_text(message: types.Message, state: FSMContext):
-    resp_msg = ''
     async with state.proxy() as data:
+        resp_msg = ''
+        weather = data['city']
         if message.text == "🌡️ Temperature":
-            weather = data['city']
             celsius = round((weather.current.temperature - 32) / 1.8)
 
             resp_msg += f'{weather.nearest_area.name}; {weather.nearest_area.country}\n'
@@ -27,7 +48,6 @@ async def handle_text(message: types.Message, state: FSMContext):
                 resp_msg += '\n\nWarmth! Dress easier!'
 
         elif message.text == "🌗 Moon_phase":
-            weather = data['city']
             resp_msg = 'Three-day moon phase forecast.\n'
             for forecast in weather.forecasts:
                 resp_msg += f'\nForecast date: {forecast.date}\n'
@@ -35,7 +55,6 @@ async def handle_text(message: types.Message, state: FSMContext):
                 resp_msg += f'Moon illumination - {forecast.astronomy.moon_illumination}%\n'
 
         elif message.text == "🕗 Hourly_forecasts":
-            weather = data['city']
             resp_msg = 'Three-day temperature forecast.\n\n'
 
             for forecast in weather.forecasts:
@@ -46,7 +65,6 @@ async def handle_text(message: types.Message, state: FSMContext):
                     resp_msg += f'Type: {hourly.type}'
 
         elif message.text == "📅 Daily_forecasts":
-            weather = data['city']
             resp_msg = 'Three-day temperature forecast.\n\n'
 
             for forecast in weather.forecasts:
@@ -59,34 +77,12 @@ async def handle_text(message: types.Message, state: FSMContext):
                             f'\nTemperature will be from {t_lowest} to {t_highest}°C\n' \
                             f'Description: {descriptions}\n\n'
                 # resp_msg += f'{forecast.date:%a}: {t}, {adescriptions}. {emoji}'
-        else:
-            weather = await client.get(message.text)
-            '''for forecast in weather.forecasts:
-                forecast.date.weekday()
-                for hourly in forecast.hourly:
-                    hourly.time'''
-            data['city'] = weather
-
-            await message.answer(f'Wow, cool city. Please choose what you need.', reply_markup=markups.mainMenu)
 
         await message.answer(resp_msg)
         await state.finish()
 
 
-# @dp.message_handler()
-'''async def process_city(message: types.Message, state: FSMContext):
-    weather = await client.get(message.text)'''
-'''for forecast in weather.forecasts:
-        forecast.date.weekday()
-        for hourly in forecast.hourly:
-            hourly.time'''
-'''async with state.proxy() as data:
-        data['city'] = weather
-
-    await message.answer(f'Wow, cool city. Please choose what you need.', reply_markup=markups.mainMenu)'''
-
-
 def register_handlers_client(dp: Dispatcher):
     dp.register_message_handler(command_start, commands=["start", "help"])
+    dp.register_message_handler(process_city, state=Form.city)
     dp.register_message_handler(handle_text, content_types=['text'])
-    # dp.register_message_handler(process_city)
