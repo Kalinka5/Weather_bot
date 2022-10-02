@@ -28,6 +28,7 @@ async def process_city(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['city'] = weather
 
+    await Form.next()
     await message.answer(f'Wow, cool city. Please choose what you need.', reply_markup=markups.mainMenu)
 
 
