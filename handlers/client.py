@@ -101,9 +101,10 @@ async def process_daily_forecasts(message: types.Message, state: FSMContext):
 
 
 # @dp.message_handler(text = 'Closing', state=Form.choice)
-async def process_closing(state: FSMContext):
+async def process_closing(message: types.Message, state: FSMContext):
     await state.finish()
-    await state.set_state(Form.city)
+    await Form.city.set()
+    await message.answer(f'Please enter the city you need.')
 
 
 def register_handlers_client(dp: Dispatcher):
