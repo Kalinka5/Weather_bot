@@ -11,9 +11,10 @@ btnTemperature = KeyboardButton('🌡️ Temperature')
 btnMoonPhase = KeyboardButton('🌗 Moon_phase')
 btnHourlyForecast = KeyboardButton('🕗 Hourly_forecasts')
 btnDailyForecast = KeyboardButton('📅 Daily_forecasts')
+btnClosing = KeyboardButton('Closing')
 # btnOther = KeyboardButton('Other')
 mainMenu = ReplyKeyboardMarkup(resize_keyboard=True)\
-    .add(btnTemperature, btnHourlyForecast).add(btnMoonPhase, btnDailyForecast)
+    .add(btnTemperature, btnHourlyForecast).add(btnMoonPhase, btnDailyForecast).add(btnClosing)
 
 # ----Other menu----
 # btnInfo = KeyboardButton('Information')

@@ -32,7 +32,7 @@ async def process_city(message: types.Message, state: FSMContext):
     await message.answer(f'Wow, cool city. Please choose what you need.', reply_markup=markups.mainMenu)
 
 
-# @dp.message_handler(lambda message: message.text == '🌡️ Temperature', state=Form.choice)
+# @dp.message_handler(text='🌡️ Temperature', state=Form.choice)
 async def process_temperature(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         resp_msg = ''
@@ -49,10 +49,9 @@ async def process_temperature(message: types.Message, state: FSMContext):
             resp_msg += '\n\nWarmth! Dress easier!'
 
         await message.answer(resp_msg)
-    await state.finish()
 
 
-# @dp.message_handler(lambda message: message.text == '🌗 Moon_phase', state=Form.choice)
+# @dp.message_handler(text='🌗 Moon_phase', state=Form.choice)
 async def process_moon_phase(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         weather = data['city']
@@ -63,10 +62,9 @@ async def process_moon_phase(message: types.Message, state: FSMContext):
             resp_msg += f'Moon illumination - {forecast.astronomy.moon_illumination}%\n'
 
         await message.answer(resp_msg)
-    await state.finish()
 
 
-# @dp.message_handler(lambda message: message.text == '🕗 Hourly_forecasts', state=Form.choice)
+# @dp.message_handler(text='🕗 Hourly_forecasts', state=Form.choice)
 async def process_hourly_forecasts(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         weather = data['city']
@@ -80,10 +78,9 @@ async def process_hourly_forecasts(message: types.Message, state: FSMContext):
                 resp_msg += f'Type: {hourly.type}'
 
         await message.answer(resp_msg)
-    await state.finish()
 
 
-# @dp.message_handler(lambda message: message.text == '📅 Daily_forecasts', state=Form.choice)
+# @dp.message_handler(text='📅 Daily_forecasts', state=Form.choice)
 async def process_daily_forecasts(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         weather = data['city']
@@ -101,6 +98,10 @@ async def process_daily_forecasts(message: types.Message, state: FSMContext):
             # resp_msg += f'{forecast.date:%a}: {t}, {adescriptions}. {emoji}'
 
         await message.answer(resp_msg)
+
+
+# @dp.message_handler(text = 'Closing', state=Form.choice)
+async def process_closing(state: FSMContext):
     await state.finish()
 
 
@@ -117,5 +118,8 @@ def register_handlers_client(dp: Dispatcher):
                                 state=Form.choice)
     dp.register_message_handler(process_daily_forecasts,
                                 text=['📅 Daily_forecasts'],
+                                state=Form.choice)
+    dp.register_message_handler(process_closing,
+                                text=['Closing'],
                                 state=Form.choice)
     dp.register_message_handler(process_city, state=Form.city)
