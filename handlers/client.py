@@ -30,8 +30,80 @@ async def process_city(message: types.Message, state: FSMContext):
     await message.answer(f'Wow, cool city. Please choose what you need.', reply_markup=markups.mainMenu)
 
 
+# @dp.message_handler(lambda message: message.text == '🌡️ Temperature')
+async def process_temperature(message: types.Message, state: FSMContext):
+    async with state.proxy() as data:
+        resp_msg = ''
+        weather = data['city']
+        celsius = round((weather.current.temperature - 32) / 1.8)
+
+        resp_msg += f'{weather.nearest_area.name}; {weather.nearest_area.country}\n'
+        resp_msg += f'Current temperature: {celsius}°\n'
+        resp_msg += f'State of the weather: {weather.current.type}'
+
+        if celsius <= 10:
+            resp_msg += '\n\nCool! Dress warmer!'
+        else:
+            resp_msg += '\n\nWarmth! Dress easier!'
+
+        await message.answer(resp_msg)
+    await state.finish()
+
+
+# @dp.message_handler(lambda message: message.text == '🌗 Moon_phase')
+async def process_moon_phase(message: types.Message, state: FSMContext):
+    async with state.proxy() as data:
+        weather = data['city']
+        resp_msg = 'Three-day moon phase forecast.\n'
+        for forecast in weather.forecasts:
+            resp_msg += f'\nForecast date: {forecast.date}\n'
+            resp_msg += f'Moon phase: {forecast.astronomy.moon_phase}\n'
+            resp_msg += f'Moon illumination - {forecast.astronomy.moon_illumination}%\n'
+
+        await message.answer(resp_msg)
+    await state.finish()
+
+
+# @dp.message_handler(lambda message: message.text == '🕗 Hourly_forecasts')
+async def process_hourly_forecasts(message: types.Message, state: FSMContext):
+    async with state.proxy() as data:
+        weather = data['city']
+        resp_msg = 'Three-day temperature forecast.\n\n'
+
+        for forecast in weather.forecasts:
+            for hourly in forecast.hourly:
+                resp_msg += f'Time: {hourly.time}'
+                resp_msg += f'Temperature: {round((hourly.temperature - 32) / 1.8)}'
+                resp_msg += f'Description: {hourly.description}'
+                resp_msg += f'Type: {hourly.type}'
+
+        await message.answer(resp_msg)
+    await state.finish()
+
+
+# @dp.message_handler(lambda message: message.text == '📅 Daily_forecasts')
+async def process_daily_forecasts(message: types.Message, state: FSMContext):
+    async with state.proxy() as data:
+        weather = data['city']
+        resp_msg = 'Three-day temperature forecast.\n\n'
+
+        for forecast in weather.forecasts:
+            day = f"{forecast.date}"
+            t_lowest = f"{round((forecast.lowest_temperature - 32) / 1.8)}"
+            t_highest = f"{round((forecast.highest_temperature - 32) / 1.8)}"
+            descriptions = ", ".join(set(h.description for h in forecast.hourly))
+            # emoji = "".join(map(repr, set(h.type for h in forecast.hourly)))
+            resp_msg += f'Date: {day}.' \
+                        f'\nTemperature will be from {t_lowest} to {t_highest}°C\n' \
+                        f'Description: {descriptions}\n\n'
+            # resp_msg += f'{forecast.date:%a}: {t}, {adescriptions}. {emoji}'
+
+        await message.answer(resp_msg)
+    await state.finish()
+
+
 # @dp.message_handler(content_types=['text'])
-async def handle_text(message: types.Message, state: FSMContext):
+'''async def handle_text(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         resp_msg = ''
         weather = data['city']
@@ -79,10 +151,14 @@ async def handle_text(message: types.Message, state: FSMContext):
                 # resp_msg += f'{forecast.date:%a}: {t}, {adescriptions}. {emoji}'
 
         await message.answer(resp_msg)
-        await state.finish()
+        await state.finish()'''
 
 
 def register_handlers_client(dp: Dispatcher):
     dp.register_message_handler(command_start, commands=["start", "help"])
-    dp.register_message_handler(handle_text, content_types=['text'])
     dp.register_message_handler(process_city, state=Form.city)
+    dp.register_message_handler(process_temperature, lambda message: message.text == '🌡️ Temperature')
+    dp.register_message_handler(process_moon_phase, lambda message: message.text == '🌗 Moon_phase')
+    dp.register_message_handler(process_hourly_forecasts, lambda message: message.text == '🕗 Hourly_forecasts')
+    dp.register_message_handler(process_daily_forecasts, lambda message: message.text == '📅 Daily_forecasts')
+    # dp.register_message_handler(handle_text, content_types=['text'])
