@@ -40,7 +40,7 @@ async def process_temperature(message: types.Message, state: FSMContext):
         celsius = round((weather.current.temperature - 32) / 1.8)
 
         resp_msg += f'{weather.nearest_area.name}; {weather.nearest_area.country}\n'
-        resp_msg += f'Current temperature: {celsius}°\n'
+        resp_msg += f'Current temperature: {celsius}°C\n'
         resp_msg += f'State of the weather: {weather.current.type}'
 
         if celsius <= 10:
@@ -72,10 +72,10 @@ async def process_hourly_forecasts(message: types.Message, state: FSMContext):
 
         for forecast in weather.forecasts:
             for hourly in forecast.hourly:
-                resp_msg += f'Time: {hourly.time}'
-                resp_msg += f'Temperature: {round((hourly.temperature - 32) / 1.8)}'
-                resp_msg += f'Description: {hourly.description}'
-                resp_msg += f'Type: {hourly.type}'
+                resp_msg += f'Time: {hourly.time}\n'\
+                            f'Temperature: {round((hourly.temperature - 32) / 1.8)}°C\n'\
+                            f'Description: {hourly.description}\n'\
+                            f'Type: {hourly.type}\n\n'
 
         await message.answer(resp_msg)
 
