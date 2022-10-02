@@ -156,9 +156,9 @@ async def process_daily_forecasts(message: types.Message, state: FSMContext):
 
 def register_handlers_client(dp: Dispatcher):
     dp.register_message_handler(command_start, commands=["start", "help"])
-    dp.register_message_handler(process_city, state=Form.city)
     dp.register_message_handler(process_temperature, lambda message: message.text == '🌡️ Temperature')
     dp.register_message_handler(process_moon_phase, lambda message: message.text == '🌗 Moon_phase')
     dp.register_message_handler(process_hourly_forecasts, lambda message: message.text == '🕗 Hourly_forecasts')
     dp.register_message_handler(process_daily_forecasts, lambda message: message.text == '📅 Daily_forecasts')
+    dp.register_message_handler(process_city, state=Form.city)
     # dp.register_message_handler(handle_text, content_types=['text'])
