@@ -1,2 +1,0 @@
-aiogram==2.22.1
-python_weather==0.4.2
