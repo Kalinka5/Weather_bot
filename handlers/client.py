@@ -20,7 +20,7 @@ async def command_start(message: types.Message):
 
 # @dp.message_handler(state=Form.city)
 async def process_city(message: types.Message, state: FSMContext):
-    weather = await client.get(message.text)
+    weather = message.text
     '''for forecast in weather.forecasts:
         forecast.date.weekday()
         for hourly in forecast.hourly:
@@ -36,12 +36,13 @@ async def process_city(message: types.Message, state: FSMContext):
 async def process_temperature(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         resp_msg = ''
-        weather = data['city']
+        weather = await client.get(data['city'])
+
         celsius = round((weather.current.temperature - 32) / 1.8)
 
         resp_msg += f'{weather.nearest_area.name}; {weather.nearest_area.country}\n'
         resp_msg += f'Current temperature: {celsius}°C\n'
-        resp_msg += f'State of the weather: {weather.current.type}'
+        resp_msg += f'State of the weather: {weather.current.kind}'
 
         if celsius <= 10:
             resp_msg += '\n\nCool! Dress warmer!'
@@ -54,7 +55,7 @@ async def process_temperature(message: types.Message, state: FSMContext):
 # @dp.message_handler(text='🌗 Moon_phase', state=Form.choice)
 async def process_moon_phase(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
-        weather = data['city']
+        weather = await client.get(data['city'])
         resp_msg = 'Three-day moon phase forecast.\n'
         for forecast in weather.forecasts:
             resp_msg += f'\nForecast date: {forecast.date}\n'
@@ -67,7 +68,7 @@ async def process_moon_phase(message: types.Message, state: FSMContext):
 # @dp.message_handler(text='🕗 Hourly_forecasts', state=Form.choice)
 async def process_hourly_forecasts(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
-        weather = data['city']
+        weather = await client.get(data['city'])
         resp_msg = 'Three-day temperature forecast.\n\n'
 
         for forecast in weather.forecasts:
@@ -75,7 +76,7 @@ async def process_hourly_forecasts(message: types.Message, state: FSMContext):
                 resp_msg += f'Time: {hourly.time}\n'\
                             f'Temperature: {round((hourly.temperature - 32) / 1.8)}°C\n'\
                             f'Description: {hourly.description}\n'\
-                            f'Type: {hourly.type}\n\n'
+                            f'Type: {hourly.kind}\n\n'
 
         await message.answer(resp_msg)
 
@@ -83,7 +84,7 @@ async def process_hourly_forecasts(message: types.Message, state: FSMContext):
 # @dp.message_handler(text='📅 Daily_forecasts', state=Form.choice)
 async def process_daily_forecasts(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
-        weather = data['city']
+        weather = await client.get(data['city'])
         resp_msg = 'Three-day temperature forecast.\n\n'
 
         for forecast in weather.forecasts:
