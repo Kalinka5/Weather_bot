@@ -1,2 +1,4 @@
 aiogram==2.25.1
 python_weather==1.0.2
+matplotlib==3.7.1
+pandas==2.0.2
