@@ -53,7 +53,6 @@ async def process_temperature(call: types.CallbackQuery, state: FSMContext):
         resp_msg += f'Current temperature: {celsius}°C\n'
         resp_msg += f'Feels like: {weather.current.feels_like}°C\n'
         resp_msg += f'State of the weather: {weather.current.kind}\n'
-        resp_msg += f'State of the wind speed: {weather.current.wind_speed} km/h\n'
 
         if celsius <= 10:
             resp_msg += '\n\nCool! Dress warmer!'
