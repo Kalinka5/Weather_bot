@@ -10,6 +10,6 @@ bot = Bot(token=TOKEN)
 
 storage = MemoryStorage()
 dp = Dispatcher(bot, storage=storage)
-client = python_weather.Client(unit=python_weather.IMPERIAL)
+client = python_weather.Client(unit=python_weather.METRIC)
 
 date = Date()

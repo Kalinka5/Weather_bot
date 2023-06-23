@@ -45,14 +45,15 @@ async def process_closing(message: types.Message, state: FSMContext):
 
 async def process_temperature(call: types.CallbackQuery, state: FSMContext):
     async with state.proxy() as data:
-        resp_msg = ''
         weather = await client.get(data['city'])
 
-        celsius = round((weather.current.temperature - 32) / 1.8)
+        celsius = weather.current.temperature
 
-        resp_msg += f'{weather.nearest_area.name}; {weather.nearest_area.country}\n'
+        resp_msg = f'{weather.nearest_area.name}; {weather.nearest_area.country}\n\n'
         resp_msg += f'Current temperature: {celsius}°C\n'
-        resp_msg += f'State of the weather: {weather.current.kind}'
+        resp_msg += f'Feels like: {weather.current.feels_like}°C\n'
+        resp_msg += f'State of the weather: {weather.current.kind}\n'
+        resp_msg += f'State of the wind speed: {weather.current.wind_speed} km/h\n'
 
         if celsius <= 10:
             resp_msg += '\n\nCool! Dress warmer!'
@@ -62,14 +63,62 @@ async def process_temperature(call: types.CallbackQuery, state: FSMContext):
         await call.message.answer(resp_msg)
 
 
+async def process_wind_speed(call: types.CallbackQuery, state: FSMContext):
+    async with state.proxy() as data:
+        weather = await client.get(data['city'])
+        wind_speed = weather.current.wind_speed
+        resp_msg = f"Wind speed: {wind_speed} km/h\n"
+
+        if wind_speed >= 39:
+            photo = open('Images/strong_wind.jpg', 'rb')
+        else:
+            photo = open('Images/wind.jpg', 'rb')
+
+        await call.message.answer_photo(photo, caption=resp_msg)
+
+
+async def process_visibility(call: types.CallbackQuery, state: FSMContext):
+    async with state.proxy() as data:
+        weather = await client.get(data['city'])
+        visibility = weather.current.visibility
+        resp_msg = f"Visibility: {visibility} km"
+
+        if visibility <= 2:
+            photo = open('Images/bad_visibility.jpg', 'rb')
+        else:
+            photo = open('Images/good_visibility.jpg', 'rb')
+
+        await call.message.answer_photo(photo, caption=resp_msg)
+
+
+async def process_ultraviolet(call: types.CallbackQuery, state: FSMContext):
+    async with state.proxy() as data:
+        weather = await client.get(data['city'])
+        resp_msg = f'Current level of ultraviolet: {weather.current.ultraviolet}'
+
+        await call.message.answer(resp_msg)
+
+
+async def process_sun_rise_set(call: types.CallbackQuery, state: FSMContext):
+    async with state.proxy() as data:
+        weather = await client.get(data['city'])
+        resp_msg = 'Three day of sun information.\n\n'
+        for forecast in weather.forecasts:
+            resp_msg += f'Date: {forecast.date}\n'
+            resp_msg += f'Sun rise: {forecast.astronomy.sun_rise}\n'
+            resp_msg += f'Sun set: {forecast.astronomy.sun_set}\n\n'
+
+        await call.message.answer(resp_msg)
+
+
 async def process_moon_phase(call: types.CallbackQuery, state: FSMContext):
     async with state.proxy() as data:
         weather = await client.get(data['city'])
-        resp_msg = 'Three-day moon phase forecast.\n'
+        resp_msg = 'Three-day moon phase forecast.\n\n'
         for forecast in weather.forecasts:
-            resp_msg += f'\nForecast date: {forecast.date}\n'
+            resp_msg += f'Forecast date: {forecast.date}\n'
             resp_msg += f'Moon phase: {forecast.astronomy.moon_phase}\n'
-            resp_msg += f'Moon illumination - {forecast.astronomy.moon_illumination}%\n'
+            resp_msg += f'Moon illumination - {forecast.astronomy.moon_illumination}%\n\n'
 
         await call.message.answer(resp_msg)
 
@@ -171,8 +220,12 @@ def register_handlers_client(dp: Dispatcher):
     dp.register_callback_query_handler(return_to_main_menu, text=["⬅️ Main menu"], state=Form.city)
     dp.register_callback_query_handler(process_temperature, text=['🌡️ Temperature'], state=Form.city)
     dp.register_callback_query_handler(process_moon_phase, text=['🌗 Moon phase'], state=Form.city)
+    dp.register_callback_query_handler(process_visibility, text=['👁️👁️ Visibility'], state=Form.city)
+    dp.register_callback_query_handler(process_wind_speed, text=['💨 Wind speed'], state=Form.city)
     dp.register_callback_query_handler(process_hourly_forecasts, text=['🕗 Hourly forecasts'], state=Form.city)
     dp.register_callback_query_handler(process_daily_forecasts, text=['📅 Daily forecasts'], state=Form.city)
+    dp.register_callback_query_handler(process_ultraviolet, text=['☀️ Ultraviolet'], state=Form.city)
+    dp.register_callback_query_handler(process_sun_rise_set, text=['🌇 Sunrise, sunset'], state=Form.city)
     dp.register_callback_query_handler(hourly_forecasts_today, text=[f'{date.today()}'], state=Form.city)
     dp.register_callback_query_handler(hourly_forecasts_tomorrow, text=[f'{date.tomorrow()}'], state=Form.city)
     dp.register_callback_query_handler(hourly_forecasts_day_after_tomorrow, text=[f'{date.day_after_tomorrow()}'], state=Form.city)

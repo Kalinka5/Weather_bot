@@ -10,11 +10,16 @@ btnMain = InlineKeyboardButton(text='⬅️ Main menu', callback_data='⬅️ Ma
 # ----Inline buttons----
 btnTemperature = InlineKeyboardButton(text='🌡️ Temperature', callback_data='🌡️ Temperature')
 btnMoonPhase = InlineKeyboardButton(text='🌗 Moon phase', callback_data='🌗 Moon phase')
+btnVisibility = InlineKeyboardButton(text='👁️👁️ Visibility', callback_data='👁️👁️ Visibility')
+btnWindSpeed = InlineKeyboardButton(text='💨 Wind speed', callback_data='💨 Wind speed')
 btnHourlyForecast = InlineKeyboardButton(text='🕗 Hourly forecasts', callback_data='🕗 Hourly forecasts')
 btnDailyForecast = InlineKeyboardButton(text='📅 Daily forecasts', callback_data='📅 Daily forecasts')
+btnUltraviolet = InlineKeyboardButton(text='☀️ Ultraviolet', callback_data='☀️ Ultraviolet')
+btnSunRiseSet = InlineKeyboardButton(text='🌇 Sunrise, sunset', callback_data='🌇 Sunrise, sunset')
 
 action_catalog = InlineKeyboardMarkup(row_width=2)
-action_catalog.add(btnTemperature, btnMoonPhase, btnHourlyForecast, btnDailyForecast)
+action_catalog.add(btnTemperature, btnMoonPhase, btnVisibility, btnWindSpeed)
+action_catalog.add(btnHourlyForecast, btnDailyForecast, btnSunRiseSet, btnUltraviolet)
 
 # ----Main_menu----
 # btnChanging = KeyboardButton('🏙️ Another city')
