@@ -2,6 +2,8 @@ from aiogram import types, Dispatcher
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 
+from .others import data_forecast
+
 from Buttons import markups
 
 from create_bot import client
@@ -159,14 +161,7 @@ async def hourly_forecasts_today(call: types.CallbackQuery, state: FSMContext):
     async with state.proxy() as data:
         city = data['city']
         weather = await client.get(city)
-        forecast_data = {'time': [], 'temperature': [], 'description': [], 'kind': []}
-        for n, forecast in enumerate(weather.forecasts):
-            if n == 0:
-                for hourly in forecast.hourly:
-                    forecast_data['time'].append(hourly.time.strftime("%H:%M"))
-                    forecast_data['temperature'].append(hourly.temperature)
-                    forecast_data['description'].append(hourly.description)
-                    forecast_data['kind'].append(hourly.kind)
+        forecast_data = data_forecast(weather, 0)
 
         image_converter = ImageConverter(forecast_data['time'], forecast_data['temperature'],
                                          forecast_data['description'], forecast_data['kind'])
@@ -181,14 +176,7 @@ async def hourly_forecasts_tomorrow(call: types.CallbackQuery, state: FSMContext
     async with state.proxy() as data:
         city = data['city']
         weather = await client.get(city)
-        forecast_data = {'time': [], 'temperature': [], 'description': [], 'kind': []}
-        for n, forecast in enumerate(weather.forecasts):
-            if n == 1:
-                for hourly in forecast.hourly:
-                    forecast_data['time'].append(hourly.time.strftime("%H:%M"))
-                    forecast_data['temperature'].append(hourly.temperature)
-                    forecast_data['description'].append(hourly.description)
-                    forecast_data['kind'].append(hourly.kind)
+        forecast_data = data_forecast(weather, 1)
 
         image_converter = ImageConverter(forecast_data['time'], forecast_data['temperature'],
                                          forecast_data['description'], forecast_data['kind'])
@@ -202,14 +190,7 @@ async def hourly_forecasts_day_after_tomorrow(call: types.CallbackQuery, state: 
     async with state.proxy() as data:
         city = data['city']
         weather = await client.get(city)
-        forecast_data = {'time': [], 'temperature': [], 'description': [], 'kind': []}
-        for n, forecast in enumerate(weather.forecasts):
-            if n == 2:
-                for hourly in forecast.hourly:
-                    forecast_data['time'].append(hourly.time.strftime("%H:%M"))
-                    forecast_data['temperature'].append(hourly.temperature)
-                    forecast_data['description'].append(hourly.description)
-                    forecast_data['kind'].append(hourly.kind)
+        forecast_data = data_forecast(weather, 2)
 
         image_converter = ImageConverter(forecast_data['time'], forecast_data['temperature'],
                                          forecast_data['description'], forecast_data['kind'])

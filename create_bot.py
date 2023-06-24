@@ -1,10 +1,12 @@
 from aiogram import Bot
 from aiogram.dispatcher import Dispatcher
-from setings import TOKEN
-import python_weather
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
+
+import python_weather
+
 from date import Date
 
+from setings import TOKEN
 
 bot = Bot(token=TOKEN)
 
