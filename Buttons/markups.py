@@ -1,31 +1,31 @@
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from create_bot import date
 
-btnMain = InlineKeyboardButton(text='⬅️ Main menu', callback_data='⬅️ Main menu')
+btn_main = InlineKeyboardButton(text='⬅️ Main menu', callback_data='⬅️ Main menu')
 
 # ----Inline buttons----
-btnTemperature = InlineKeyboardButton(text='🌡️ Temperature', callback_data='🌡️ Temperature')
-btnMoonPhase = InlineKeyboardButton(text='🌗 Moon phase', callback_data='🌗 Moon phase')
-btnVisibility = InlineKeyboardButton(text='👁️👁️ Visibility', callback_data='👁️👁️ Visibility')
-btnWindSpeed = InlineKeyboardButton(text='💨 Wind speed', callback_data='💨 Wind speed')
-btnHourlyForecast = InlineKeyboardButton(text='🕗 Hourly forecasts', callback_data='🕗 Hourly forecasts')
-btnDailyForecast = InlineKeyboardButton(text='📅 Daily forecasts', callback_data='📅 Daily forecasts')
-btnUltraviolet = InlineKeyboardButton(text='☀️ Ultraviolet', callback_data='☀️ Ultraviolet')
-btnSunRiseSet = InlineKeyboardButton(text='🌇 Sunrise, sunset', callback_data='🌇 Sunrise, sunset')
-btnChangingCity = InlineKeyboardButton(text='🏙️ Another city', callback_data='🏙️ Another city')
+btn_temperature = InlineKeyboardButton(text='🌡️ Temperature', callback_data='🌡️ Temperature')
+btn_moon_phase = InlineKeyboardButton(text='🌗 Moon phase', callback_data='🌗 Moon phase')
+btn_visibility = InlineKeyboardButton(text='👁️👁️ Visibility', callback_data='👁️👁️ Visibility')
+btn_wind_speed = InlineKeyboardButton(text='💨 Wind speed', callback_data='💨 Wind speed')
+btn_hourly_forecast = InlineKeyboardButton(text='🕗 Hourly forecasts', callback_data='🕗 Hourly forecasts')
+btn_daily_forecast = InlineKeyboardButton(text='📅 Daily forecasts', callback_data='📅 Daily forecasts')
+btn_ultraviolet = InlineKeyboardButton(text='☀️ Ultraviolet', callback_data='☀️ Ultraviolet')
+btn_sun_rise_set = InlineKeyboardButton(text='🌇 Sunrise, sunset', callback_data='🌇 Sunrise, sunset')
+btn_changing_city = InlineKeyboardButton(text='🏙️ Another city', callback_data='🏙️ Another city')
 
 action_catalog = InlineKeyboardMarkup(row_width=2)
-action_catalog.add(btnTemperature, btnMoonPhase, btnVisibility, btnWindSpeed)
-action_catalog.add(btnSunRiseSet, btnUltraviolet, btnHourlyForecast, btnDailyForecast)
-action_catalog.add(btnChangingCity)
+action_catalog.add(btn_temperature, btn_moon_phase, btn_visibility, btn_wind_speed)
+action_catalog.add(btn_sun_rise_set, btn_ultraviolet, btn_hourly_forecast, btn_daily_forecast)
+action_catalog.add(btn_changing_city)
 
 # ----Hourly_forecasts menu----
 btn_first_day = InlineKeyboardButton(text=date.today(), callback_data=date.today())
 btn_second_day = InlineKeyboardButton(text=date.tomorrow(), callback_data=date.tomorrow())
 btn_third_day = InlineKeyboardButton(text=date.day_after_tomorrow(), callback_data=date.day_after_tomorrow())
 
-hourlyForecastsCatalog = InlineKeyboardMarkup(row_width=3)
-hourlyForecastsCatalog.add(btn_first_day, btn_second_day, btn_third_day).add(btnMain)
+hourly_forecasts_catalog = InlineKeyboardMarkup(row_width=3)
+hourly_forecasts_catalog.add(btn_first_day, btn_second_day, btn_third_day).add(btn_main)
 
 # ----Reply buttons----
 # btnChanging = KeyboardButton('🏙️ Another city')

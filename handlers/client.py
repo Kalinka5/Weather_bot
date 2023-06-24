@@ -134,7 +134,7 @@ async def process_moon_phase(call: types.CallbackQuery, state: FSMContext):
 
 async def process_hourly_forecasts(call: types.CallbackQuery):
     await call.message.edit_text(text="Please choose day of the hourly forecast:",
-                                 reply_markup=markups.hourlyForecastsCatalog)
+                                 reply_markup=markups.hourly_forecasts_catalog)
 
 
 async def hourly_forecasts_today(call: types.CallbackQuery, state: FSMContext):
