@@ -16,10 +16,12 @@ btnHourlyForecast = InlineKeyboardButton(text='🕗 Hourly forecasts', callback_
 btnDailyForecast = InlineKeyboardButton(text='📅 Daily forecasts', callback_data='📅 Daily forecasts')
 btnUltraviolet = InlineKeyboardButton(text='☀️ Ultraviolet', callback_data='☀️ Ultraviolet')
 btnSunRiseSet = InlineKeyboardButton(text='🌇 Sunrise, sunset', callback_data='🌇 Sunrise, sunset')
+btnChangingCity = InlineKeyboardButton(text='🏙️ Another city', callback_data='🏙️ Another city')
 
 action_catalog = InlineKeyboardMarkup(row_width=2)
 action_catalog.add(btnTemperature, btnMoonPhase, btnVisibility, btnWindSpeed)
 action_catalog.add(btnHourlyForecast, btnDailyForecast, btnSunRiseSet, btnUltraviolet)
+action_catalog.add(btnChangingCity)
 
 # ----Main_menu----
 # btnChanging = KeyboardButton('🏙️ Another city')

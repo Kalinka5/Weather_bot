@@ -37,10 +37,10 @@ async def return_to_main_menu(call: types.CallbackQuery):
                                  reply_markup=markups.action_catalog)
 
 
-async def process_closing(message: types.Message, state: FSMContext):
+async def process_closing(call: types.CallbackQuery, state: FSMContext):
     await state.finish()
     await Form.city.set()
-    await message.answer(f'Please enter the city you need.')
+    await call.message.answer(f'Please enter the city you need.')
 
 
 async def process_temperature(call: types.CallbackQuery, state: FSMContext):
@@ -66,12 +66,14 @@ async def process_wind_speed(call: types.CallbackQuery, state: FSMContext):
     async with state.proxy() as data:
         weather = await client.get(data['city'])
         wind_speed = weather.current.wind_speed
-        resp_msg = f"Wind speed: {wind_speed} km/h\n"
+        resp_msg = f"Wind speed: {wind_speed} km/h"
 
         if wind_speed >= 39:
             photo = open('Images/strong_wind.jpg', 'rb')
+            resp_msg += ", Strong wind"
         else:
             photo = open('Images/wind.jpg', 'rb')
+            resp_msg += ", Light wind"
 
         await call.message.answer_photo(photo, caption=resp_msg)
 
@@ -84,8 +86,10 @@ async def process_visibility(call: types.CallbackQuery, state: FSMContext):
 
         if visibility <= 2:
             photo = open('Images/bad_visibility.jpg', 'rb')
+            resp_msg += ", Bad visibility"
         else:
             photo = open('Images/good_visibility.jpg', 'rb')
+            resp_msg += ", Good visibility"
 
         await call.message.answer_photo(photo, caption=resp_msg)
 
@@ -93,9 +97,15 @@ async def process_visibility(call: types.CallbackQuery, state: FSMContext):
 async def process_ultraviolet(call: types.CallbackQuery, state: FSMContext):
     async with state.proxy() as data:
         weather = await client.get(data['city'])
-        resp_msg = f'Current level of ultraviolet: {weather.current.ultraviolet}'
+        ultraviolet = weather.current.ultraviolet
+        resp_msg = f'Current level of ultraviolet: {ultraviolet}'
 
-        await call.message.answer(resp_msg)
+        if ultraviolet.__str__() == "High":
+            photo = open('Images/high_ultraviolet.jpg', 'rb')
+        else:
+            photo = open('Images/low_ultraviolet.jpg', 'rb')
+
+        await call.message.answer_photo(photo, caption=resp_msg)
 
 
 async def process_sun_rise_set(call: types.CallbackQuery, state: FSMContext):
@@ -212,7 +222,6 @@ def register_handlers_client(dp: Dispatcher):
     # ----Commands----
     dp.register_message_handler(command_start, commands=["start", "weather"], state='*')
     dp.register_message_handler(command_help, commands="help", state='*')
-    dp.register_message_handler(process_closing, commands="change_city", state='*')
     # ----Set a city----
     dp.register_message_handler(process_city, state=Form.city)
     # ----Inline buttons----
@@ -225,6 +234,7 @@ def register_handlers_client(dp: Dispatcher):
     dp.register_callback_query_handler(process_daily_forecasts, text=['📅 Daily forecasts'], state=Form.city)
     dp.register_callback_query_handler(process_ultraviolet, text=['☀️ Ultraviolet'], state=Form.city)
     dp.register_callback_query_handler(process_sun_rise_set, text=['🌇 Sunrise, sunset'], state=Form.city)
+    dp.register_callback_query_handler(process_closing, text=['🏙️ Another city'], state=Form.city)
     dp.register_callback_query_handler(hourly_forecasts_today, text=[f'{date.today()}'], state=Form.city)
     dp.register_callback_query_handler(hourly_forecasts_tomorrow, text=[f'{date.tomorrow()}'], state=Form.city)
     dp.register_callback_query_handler(hourly_forecasts_day_after_tomorrow, text=[f'{date.day_after_tomorrow()}'], state=Form.city)
