@@ -1,9 +1,12 @@
 from aiogram import types, Dispatcher
-from Buttons import markups
-from create_bot import client
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
+
+from Buttons import markups
+
+from create_bot import client
 from create_bot import date
+
 from image_converter import ImageConverter
 
 
@@ -12,13 +15,23 @@ class Form(StatesGroup):
 
 
 async def command_start(message: types.Message, state: FSMContext):
-    await state.finish()
+    current_state = await state.get_state()
+    if current_state is None:
+        pass
+    else:
+        await state.finish()
+
     await Form.city.set()
     await message.answer(f"Hello, {message.from_user.first_name}.\nPlease enter the city you need.")
 
 
 async def command_help(message: types.Message, state: FSMContext):
-    await state.finish()
+    current_state = await state.get_state()
+    if current_state is None:
+        pass
+    else:
+        await state.finish()
+
     await message.answer("I can tell you about the weather in all cities, "
                          "write commands\n/start or /weather to enter the city.")
 
@@ -38,7 +51,12 @@ async def return_to_main_menu(call: types.CallbackQuery):
 
 
 async def process_closing(call: types.CallbackQuery, state: FSMContext):
-    await state.finish()
+    current_state = await state.get_state()
+    if current_state is None:
+        pass
+    else:
+        await state.finish()
+
     await Form.city.set()
     await call.message.answer("Please enter the city you need.")
 
