@@ -14,7 +14,7 @@ class Form(StatesGroup):
 async def command_start(message: types.Message, state: FSMContext):
     await state.finish()
     await Form.city.set()
-    await message.answer(f'Hello, {message.from_user.first_name}.\nPlease enter the city you need.')
+    await message.answer(f"Hello, {message.from_user.first_name}.\nPlease enter the city you need.")
 
 
 async def command_help(message: types.Message, state: FSMContext):
@@ -28,19 +28,19 @@ async def process_city(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['city'] = weather
 
-    await message.answer('Please choose information what you need about this city:',
+    await message.answer("Please choose information what you need about this city:",
                          reply_markup=markups.action_catalog)
 
 
 async def return_to_main_menu(call: types.CallbackQuery):
-    await call.message.edit_text(text='Please choose information what you need about this city:',
+    await call.message.edit_text(text="Please choose information what you need about this city:",
                                  reply_markup=markups.action_catalog)
 
 
 async def process_closing(call: types.CallbackQuery, state: FSMContext):
     await state.finish()
     await Form.city.set()
-    await call.message.answer(f'Please enter the city you need.')
+    await call.message.answer("Please enter the city you need.")
 
 
 async def process_temperature(call: types.CallbackQuery, state: FSMContext):
@@ -49,15 +49,15 @@ async def process_temperature(call: types.CallbackQuery, state: FSMContext):
 
         celsius = weather.current.temperature
 
-        resp_msg = f'{weather.nearest_area.name}; {weather.nearest_area.country}\n\n'
-        resp_msg += f'Current temperature: {celsius}°C\n'
-        resp_msg += f'Feels like: {weather.current.feels_like}°C\n'
-        resp_msg += f'State of the weather: {weather.current.kind}\n'
+        resp_msg = f"{weather.nearest_area.name}; {weather.nearest_area.country}\n\n"
+        resp_msg += f"Current temperature: {celsius}°C\n"
+        resp_msg += f"Feels like: {weather.current.feels_like}°C\n"
+        resp_msg += f"State of the weather: {weather.current.kind}\n\n"
 
         if celsius <= 10:
-            resp_msg += '\n\nCool! Dress warmer!'
+            resp_msg += "Cool! Dress warmer!"
         else:
-            resp_msg += '\n\nWarmth! Dress easier!'
+            resp_msg += "Warmth! Dress easier!"
 
         await call.message.answer(resp_msg)
 
@@ -98,7 +98,7 @@ async def process_ultraviolet(call: types.CallbackQuery, state: FSMContext):
     async with state.proxy() as data:
         weather = await client.get(data['city'])
         ultraviolet = weather.current.ultraviolet
-        resp_msg = f'Current level of ultraviolet: {ultraviolet}'
+        resp_msg = f"Current level of ultraviolet: {ultraviolet}"
 
         if ultraviolet.__str__() == "High":
             photo = open('Images/high_ultraviolet.jpg', 'rb')
@@ -111,11 +111,11 @@ async def process_ultraviolet(call: types.CallbackQuery, state: FSMContext):
 async def process_sun_rise_set(call: types.CallbackQuery, state: FSMContext):
     async with state.proxy() as data:
         weather = await client.get(data['city'])
-        resp_msg = 'Three day of sun information.\n\n'
+        resp_msg = "Three day of sun information.\n\n"
         for forecast in weather.forecasts:
-            resp_msg += f'Date: {forecast.date}\n'
-            resp_msg += f'Sun rise: {forecast.astronomy.sun_rise}\n'
-            resp_msg += f'Sun set: {forecast.astronomy.sun_set}\n\n'
+            resp_msg += f"Date: {forecast.date}\n"
+            resp_msg += f"Sun rise: {forecast.astronomy.sun_rise}\n"
+            resp_msg += f"Sun set: {forecast.astronomy.sun_set}\n\n"
 
         await call.message.answer(resp_msg)
 
@@ -123,17 +123,17 @@ async def process_sun_rise_set(call: types.CallbackQuery, state: FSMContext):
 async def process_moon_phase(call: types.CallbackQuery, state: FSMContext):
     async with state.proxy() as data:
         weather = await client.get(data['city'])
-        resp_msg = 'Three-day moon phase forecast.\n\n'
+        resp_msg = "Three-day moon phase forecast.\n\n"
         for forecast in weather.forecasts:
-            resp_msg += f'Forecast date: {forecast.date}\n'
-            resp_msg += f'Moon phase: {forecast.astronomy.moon_phase}\n'
-            resp_msg += f'Moon illumination - {forecast.astronomy.moon_illumination}%\n\n'
+            resp_msg += f"Forecast date: {forecast.date}\n"
+            resp_msg += f"Moon phase: {forecast.astronomy.moon_phase}\n"
+            resp_msg += f"Moon illumination - {forecast.astronomy.moon_illumination}%\n\n"
 
         await call.message.answer(resp_msg)
 
 
 async def process_hourly_forecasts(call: types.CallbackQuery):
-    await call.message.edit_text(text='Please choose day of the hourly forecast:',
+    await call.message.edit_text(text="Please choose day of the hourly forecast:",
                                  reply_markup=markups.hourlyForecastsCatalog)
 
 
@@ -146,7 +146,7 @@ async def hourly_forecasts_today(call: types.CallbackQuery, state: FSMContext):
             if n == 0:
                 for hourly in forecast.hourly:
                     forecast_data['time'].append(hourly.time.strftime("%H:%M"))
-                    forecast_data['temperature'].append(round((hourly.temperature - 32) / 1.8))
+                    forecast_data['temperature'].append(hourly.temperature)
                     forecast_data['description'].append(hourly.description)
                     forecast_data['kind'].append(hourly.kind)
 
@@ -165,10 +165,10 @@ async def hourly_forecasts_tomorrow(call: types.CallbackQuery, state: FSMContext
         weather = await client.get(city)
         forecast_data = {'time': [], 'temperature': [], 'description': [], 'kind': []}
         for n, forecast in enumerate(weather.forecasts):
-            if n == 0:
+            if n == 1:
                 for hourly in forecast.hourly:
                     forecast_data['time'].append(hourly.time.strftime("%H:%M"))
-                    forecast_data['temperature'].append(round((hourly.temperature - 32) / 1.8))
+                    forecast_data['temperature'].append(hourly.temperature)
                     forecast_data['description'].append(hourly.description)
                     forecast_data['kind'].append(hourly.kind)
 
@@ -186,10 +186,10 @@ async def hourly_forecasts_day_after_tomorrow(call: types.CallbackQuery, state: 
         weather = await client.get(city)
         forecast_data = {'time': [], 'temperature': [], 'description': [], 'kind': []}
         for n, forecast in enumerate(weather.forecasts):
-            if n == 0:
+            if n == 2:
                 for hourly in forecast.hourly:
                     forecast_data['time'].append(hourly.time.strftime("%H:%M"))
-                    forecast_data['temperature'].append(round((hourly.temperature - 32) / 1.8))
+                    forecast_data['temperature'].append(hourly.temperature)
                     forecast_data['description'].append(hourly.description)
                     forecast_data['kind'].append(hourly.kind)
 
@@ -204,16 +204,16 @@ async def hourly_forecasts_day_after_tomorrow(call: types.CallbackQuery, state: 
 async def process_daily_forecasts(call: types.CallbackQuery, state: FSMContext):
     async with state.proxy() as data:
         weather = await client.get(data['city'])
-        resp_msg = 'Three-day temperature forecast.\n\n'
+        resp_msg = "Three-day temperature forecast.\n\n"
 
         for forecast in weather.forecasts:
             day = forecast.date
-            t_lowest = round((forecast.lowest_temperature - 32) / 1.8)
-            t_highest = round((forecast.highest_temperature - 32) / 1.8)
+            t_lowest = forecast.lowest_temperature
+            t_highest = forecast.highest_temperature
             descriptions = ", ".join(set(h.description for h in forecast.hourly))
-            resp_msg += f'Date: {day}.' \
-                        f'\nTemperature will be from {t_lowest} to {t_highest}°C\n' \
-                        f'Description: {descriptions}\n\n'
+            resp_msg += f"Date: {day}\n"
+            resp_msg += f"Temperature will be from {t_lowest} to {t_highest}°C\n"
+            resp_msg += f"Description: {descriptions}\n\n"
 
         await call.message.answer(resp_msg)
 

@@ -2,7 +2,7 @@ from aiogram.utils import executor
 from create_bot import dp
 
 from handlers import client
-# , admin
+# admin line
 client.register_handlers_client(dp)
 
 # run long-polling

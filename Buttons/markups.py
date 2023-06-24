@@ -1,10 +1,6 @@
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from create_bot import date
 
-# btnStart
-# btnStart = KeyboardButton('/start')
-# mainStart = ReplyKeyboardMarkup(resize_keyboard=True).add(btnStart)
-
 btnMain = InlineKeyboardButton(text='⬅️ Main menu', callback_data='⬅️ Main menu')
 
 # ----Inline buttons----
@@ -20,14 +16,8 @@ btnChangingCity = InlineKeyboardButton(text='🏙️ Another city', callback_dat
 
 action_catalog = InlineKeyboardMarkup(row_width=2)
 action_catalog.add(btnTemperature, btnMoonPhase, btnVisibility, btnWindSpeed)
-action_catalog.add(btnHourlyForecast, btnDailyForecast, btnSunRiseSet, btnUltraviolet)
+action_catalog.add(btnSunRiseSet, btnUltraviolet, btnHourlyForecast, btnDailyForecast)
 action_catalog.add(btnChangingCity)
-
-# ----Main_menu----
-# btnChanging = KeyboardButton('🏙️ Another city')
-#
-# mainMenu = ReplyKeyboardMarkup(resize_keyboard=True)
-# mainMenu.add(btnChanging)
 
 # ----Hourly_forecasts menu----
 btn_first_day = InlineKeyboardButton(text=date.today(), callback_data=date.today())
@@ -36,3 +26,9 @@ btn_third_day = InlineKeyboardButton(text=date.day_after_tomorrow(), callback_da
 
 hourlyForecastsCatalog = InlineKeyboardMarkup(row_width=3)
 hourlyForecastsCatalog.add(btn_first_day, btn_second_day, btn_third_day).add(btnMain)
+
+# ----Reply buttons----
+# btnChanging = KeyboardButton('🏙️ Another city')
+#
+# mainMenu = ReplyKeyboardMarkup(resize_keyboard=True)
+# mainMenu.add(btnChanging)
