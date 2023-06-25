@@ -5,7 +5,8 @@ from scipy.interpolate import make_interp_spline
 
 
 class ImageConverter:
-    def __init__(self, time, temperature, description, kind):
+    def __init__(self, language, time, temperature, description, kind):
+        self.language = language
         self.time = time
         self.temperature = temperature
         self.description = description
@@ -21,9 +22,14 @@ class ImageConverter:
 
     def today_forecast(self):
 
-        plt.xlabel('Time')  # X axis
-        plt.ylabel('Temperature')  # Y axis
-        plt.suptitle("Today Hourly Forecast")  # create title
+        if self.language == "🇬🇧 English":
+            plt.xlabel('Time')  # X axis
+            plt.ylabel('Temperature')  # Y axis
+            plt.suptitle("Today Hourly Forecast")  # create title
+        else:
+            plt.xlabel('Час')  # X axis
+            plt.ylabel('Температура')  # Y axis
+            plt.suptitle("Погодинний Прогноз На Сьогодні")  # create title
 
         idx = range(len(self.data['time']))
         xnew = np.linspace(min(idx), max(idx), 300)
@@ -47,9 +53,14 @@ class ImageConverter:
 
     def tomorrow_forecast(self):
 
-        plt.xlabel('Time')  # X axis
-        plt.ylabel('Temperature')  # Y axis
-        plt.suptitle("Tomorrow Hourly Forecast")  # create title
+        if self.language == "🇬🇧 English":
+            plt.xlabel('Time')  # X axis
+            plt.ylabel('Temperature')  # Y axis
+            plt.suptitle("Tomorrow Hourly Forecast")  # create title
+        else:
+            plt.xlabel('Час')  # X axis
+            plt.ylabel('Температура')  # Y axis
+            plt.suptitle("Погодинний Прогноз На Завтра")  # create title
 
         idx = range(len(self.data['time']))
         xnew = np.linspace(min(idx), max(idx), 300)
@@ -73,9 +84,14 @@ class ImageConverter:
 
     def day_after_tomorrow_forecast(self):
 
-        plt.xlabel('Time')  # X axis
-        plt.ylabel('Temperature')  # Y axis
-        plt.suptitle("Day After Tomorrow Hourly Forecast")  # create title
+        if self.language == "🇬🇧 English":
+            plt.xlabel('Time')  # X axis
+            plt.ylabel('Temperature')  # Y axis
+            plt.suptitle("Day After Tomorrow Hourly Forecast")  # create title
+        else:
+            plt.xlabel('Час')  # X axis
+            plt.ylabel('Температура')  # Y axis
+            plt.suptitle("Погодинний Прогноз На Післязавтра")  # create title
 
         idx = range(len(self.data['time']))
         xnew = np.linspace(min(idx), max(idx), 300)

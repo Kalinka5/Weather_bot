@@ -2,6 +2,8 @@ from aiogram import Bot
 from aiogram.dispatcher import Dispatcher
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
+from deep_translator import GoogleTranslator
+
 import python_weather
 
 from date import Date
@@ -15,3 +17,5 @@ dp = Dispatcher(bot, storage=storage)
 client = python_weather.Client(unit=python_weather.METRIC)
 
 date = Date()
+
+translator = GoogleTranslator(source='auto', target='uk')

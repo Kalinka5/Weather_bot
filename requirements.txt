@@ -4,3 +4,4 @@ matplotlib==3.7.1
 pandas==2.0.2
 numpy==1.25.0
 scipy==1.10.1
+deep_translator==1.11.1
