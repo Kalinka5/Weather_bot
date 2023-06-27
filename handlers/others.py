@@ -1,7 +1,9 @@
 import python_weather
 
 
-def data_forecast(weather: python_weather.Client.get, day: int):
+def data_forecast(weather: python_weather.Client.get, day: int) -> dict:
+    """Get forecast of certain day, return time, temperature, description and kind of weather"""
+
     forecast_data = {'time': [], 'temperature': [], 'description': [], 'kind': []}
     for n, forecast in enumerate(weather.forecasts):
         if n == day:

@@ -174,7 +174,6 @@ async def process_humidity(call: types.CallbackQuery, state: FSMContext):
     async with state.proxy() as data:
         weather = await client.get(data['city'])
         humidity = weather.current.humidity
-        print(humidity)
 
         if data['language'] == "🇬🇧 English":
             resp_msg = f"Current percentage of humidity: {humidity}%"
@@ -186,7 +185,7 @@ async def process_humidity(call: types.CallbackQuery, state: FSMContext):
         elif humidity < 40:
             photo = open('Images/low_humidity.jpg', 'rb')
         else:
-            photo = open('Images/norm_humidity_1.jpg', 'rb')
+            photo = open('Images/norm_humidity.jpg', 'rb')
 
         await call.message.answer_photo(photo, caption=resp_msg)
 
@@ -251,7 +250,7 @@ async def hourly_forecasts_today(call: types.CallbackQuery, state: FSMContext):
 
         image_converter = ImageConverter(language, forecast_data['time'], forecast_data['temperature'],
                                          forecast_data['description'], forecast_data['kind'])
-        image_converter.today_forecast()
+        image_converter.forecast("today")
 
     photo = open('Forecasts/Today_forecast.png', 'rb')
     t_lowest = min(forecast_data['temperature'])
@@ -274,7 +273,7 @@ async def hourly_forecasts_tomorrow(call: types.CallbackQuery, state: FSMContext
 
         image_converter = ImageConverter(language, forecast_data['time'], forecast_data['temperature'],
                                          forecast_data['description'], forecast_data['kind'])
-        image_converter.tomorrow_forecast()
+        image_converter.forecast("tomorrow")
 
     photo = open('Forecasts/Tomorrow_forecast.png', 'rb')
     t_lowest = min(forecast_data['temperature'])
@@ -297,7 +296,7 @@ async def hourly_forecasts_day_after_tomorrow(call: types.CallbackQuery, state: 
 
         image_converter = ImageConverter(language, forecast_data['time'], forecast_data['temperature'],
                                          forecast_data['description'], forecast_data['kind'])
-        image_converter.day_after_tomorrow_forecast()
+        image_converter.forecast("day after tomorrow")
 
     photo = open('Forecasts/Day_After_Tomorrow_forecast.png', 'rb')
     t_lowest = min(forecast_data['temperature'])
@@ -324,14 +323,14 @@ async def process_daily_forecasts(call: types.CallbackQuery, state: FSMContext):
             day = forecast.date
             t_lowest = forecast.lowest_temperature
             t_highest = forecast.highest_temperature
-            descriptions = ", ".join(set(h.description for h in forecast.hourly))
-            translation = translator.translate(descriptions)
+
             if language == "🇬🇧 English":
+                descriptions = ", ".join(set(h.description for h in forecast.hourly))
                 resp_msg += f"Date: {day}\n"
                 resp_msg += f"Temperature will be from {t_lowest} to {t_highest}°C\n"
                 resp_msg += f"Description: {descriptions}\n\n"
-
             else:
+                translation = ", ".join(set(translator.translate(h.description) for h in forecast.hourly))
                 resp_msg += f"Дата: {day}\n"
                 resp_msg += f"Температура буде від {t_lowest} до {t_highest}°C\n"
                 resp_msg += f"Опис погоди: {translation}\n\n"
