@@ -34,13 +34,13 @@ ___
 <ol>
   <li><b>Start the Bot</b>: Search for @WeatherBot on Telegram and start a conversation with the bot by clicking on the "Start" button.</li>
   <li><b>Choose Language</b>: To select your preferred language, use the command /language and select either English or Ukrainian.</li>
-  <li><b>City-specific Weather</b>: Type the name of a city :department_store: to retrieve the weather information for that location. For example, send a message like: "London" or "New York".</li>
+  <li><b>City-specific Weather</b>: Type the name of a city :department_store: to retrieve the weather information for that location. For example, send a message like: "New York" or "London".</li>
   <li><b>Current Temperature</b>: To get the current temperature of a city, use the button 🌡️ Temperature.</li>
   <li><b>Humidity</b>: If you want to check the humidity level of a particular location, use the button 💧 Humidity.</li>
-  <li><b>Visibility</b>: To inquire about the visibility conditions in a city, utilize the button 👁️👁️ Visibility. WeatherBot will furnish you with the visibility range or conditions, ensuring you're well-informed.</li>
-  <li><b>Wind Speed</b>: To gather information about the wind speed in a specific location, employ the button 💨 Wind speed. WeatherBot will swiftly respond with the current wind speed, assisting you in planning outdoor activities accordingly.</li>
-  <li><b>Sunrise and Sunset</b>: To discover the sunrise and sunset times for a particular city, use the button 🌇 Sunrise, sunset. WeatherBot will provide you with the respective timings, helping you make the most of your day.</li>
-  <li><b>Moon Phase Details</b>: To explore the current moon phase, employ the button 🌗 Moon phase. WeatherBot will enchant you with information about the current phase of the moon, allowing you to appreciate its celestial beauty.</li>
+  <li><b>Visibility</b>: To inquire about the visibility conditions in a city, utilize the button 👁️👁️ Visibility.</li>
+  <li><b>Wind Speed</b>: To gather information about the wind speed in a specific location, employ the button 💨 Wind speed.</li>
+  <li><b>Sunrise and Sunset</b>: To discover the sunrise and sunset times for a particular city, use the button 🌇 Sunrise, sunset.</li>
+  <li><b>Moon Phase Details</b>: To explore the current moon phase, employ the button 🌗 Moon phase.</li>
   <li><b>Hourly and Daily Forecasts</b>: To receive hourly or daily forecasts, use the buttons 🕗 Hourly forecasts or 📅 Daily forecasts.</li>
 </ol>
 
