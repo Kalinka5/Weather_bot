@@ -1,5 +1,6 @@
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, KeyboardButton, ReplyKeyboardMarkup
-from create_bot import date
+
+from date import today, tomorrow, day_after_tomorrow
 
 # ----Inline buttons (EN)----
 btn_temperature = InlineKeyboardButton(text='🌡️ Temperature', callback_data='🌡️ Temperature')
@@ -19,9 +20,9 @@ action_catalog.add(btn_changing_city)
 
 # ----Hourly_forecasts menu----
 btn_main = InlineKeyboardButton(text='⬅️ Main menu', callback_data='⬅️ Main menu')
-btn_first_day = InlineKeyboardButton(text=date.today(), callback_data=date.today())
-btn_second_day = InlineKeyboardButton(text=date.tomorrow(), callback_data=date.tomorrow())
-btn_third_day = InlineKeyboardButton(text=date.day_after_tomorrow(), callback_data=date.day_after_tomorrow())
+btn_first_day = InlineKeyboardButton(text=today(), callback_data=today())
+btn_second_day = InlineKeyboardButton(text=tomorrow(), callback_data=tomorrow())
+btn_third_day = InlineKeyboardButton(text=day_after_tomorrow(), callback_data=day_after_tomorrow())
 
 hourly_forecasts_catalog = InlineKeyboardMarkup(row_width=3)
 hourly_forecasts_catalog.add(btn_first_day, btn_second_day, btn_third_day).add(btn_main)

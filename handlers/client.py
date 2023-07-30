@@ -6,7 +6,9 @@ from .others import data_forecast
 
 from Buttons import markups
 
-from create_bot import client, date, translator
+from create_bot import client, translator
+
+from date import today, tomorrow, day_after_tomorrow
 
 from image_converter import ImageConverter
 
@@ -25,7 +27,7 @@ async def command_start(message: types.Message, state: FSMContext):
 
     await Form.language.set()
     # username = message.from_user.first_name
-    resp_message = "Please choose the language of communication.\nБудь ласка, оберіть мову спілкування."
+    resp_message = "Please choose the language of communication 🇬🇧.\nБудь ласка, оберіть мову спілкування 🇺🇦."
     await message.answer(resp_message, reply_markup=markups.lang_buttons)
 
 
@@ -357,6 +359,6 @@ def register_handlers_client(dp: Dispatcher):
     dp.register_callback_query_handler(process_humidity, text=['💧 Humidity', '💧 Вологість'], state=Form.city)
     dp.register_callback_query_handler(process_sun_rise_set, text=['🌇 Sunrise, sunset', '🌇 Схід, Захід'], state=Form.city)
     dp.register_callback_query_handler(process_closing, text=['🏙️ Another city', '🏙️ Інше місто'], state=Form.city)
-    dp.register_callback_query_handler(hourly_forecasts_today, text=[f'{date.today()}'], state=Form.city)
-    dp.register_callback_query_handler(hourly_forecasts_tomorrow, text=[f'{date.tomorrow()}'], state=Form.city)
-    dp.register_callback_query_handler(hourly_forecasts_day_after_tomorrow, text=[f'{date.day_after_tomorrow()}'], state=Form.city)
+    dp.register_callback_query_handler(hourly_forecasts_today, text=[f'{today()}'], state=Form.city)
+    dp.register_callback_query_handler(hourly_forecasts_tomorrow, text=[f'{tomorrow()}'], state=Form.city)
+    dp.register_callback_query_handler(hourly_forecasts_day_after_tomorrow, text=[f'{day_after_tomorrow()}'], state=Form.city)
